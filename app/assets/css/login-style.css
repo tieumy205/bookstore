@@ -1,0 +1,156 @@
+
+.login-container {
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 8px 24px rgba(149, 157, 165, 0.2);
+}
+
+.login-container h2 {
+    color: #333;
+    font-size: 28px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.login-container .form-control {
+    background: #fff;
+    border: none;
+    border-radius: 50px;
+    height: 50px;
+    padding: 0 20px;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.login-container .form-control:focus {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    outline: none;
+}
+
+.login-container .form-check {
+    margin: 15px 0;
+}
+
+.login-container .form-check-input {
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.login-container .form-check-label {
+    color: #666;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.login-container .forgot-link {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.login-container .forgot-link:hover {
+    text-decoration: underline;
+}
+
+.login-container .btn-primary {
+    background-color: #333;
+    border: none;
+    border-radius: 50px;
+    height: 50px;
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    margin-top: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-container .btn-primary:hover {
+    background-color: #222;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.login-container .signup-text {
+    text-align: center;
+    margin-top: 25px;
+    color: #666;
+    font-size: 14px;
+}
+
+.login-container .signup-text a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-container .signup-text a:hover {
+    text-decoration: underline;
+}
+
+/* Animation cho form */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-container {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .login-container .login-container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .login-container .login-container h2 {
+        font-size: 20px;
+    }
+    
+    .login-container .form-control {
+        height: 44px;
+        font-size: 14px;
+    }
+    
+    .login-container .btn-primary {
+        height: 44px;
+        font-size: 14px;
+    }
+}
+
+/* Custom placeholder color */
+.login-container ::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+/* Error state for inputs */
+.login-container .form-control.is-invalid {
+    border-color: #dc3545;
+    background-image: none;
+}
+
+.login-container .form-control.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Success state for inputs */
+.login-container .form-control.is-valid {
+    border-color: #198754;
+    background-image: none;
+}
+
+.login-container .form-control.is-valid:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+} 
