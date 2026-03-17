@@ -1,0 +1,213 @@
+Các trigger trong báo cáo
+
+trg_grn_total_after_insert:	tính tổng phiếu nhập
+trg_update_stock_after_grn:	cập nhật tồn + average cost
+trg_inventory_import:	log nhập kho
+trg_reduce_stock_after_order:	giảm tồn
+trg_inventory_sale:	log bán
+trg_cart_total_quantity:	tổng số lượng giỏ
+trg_order_total_price:	tổng tiền đơn
+trg_replenishment_frequency:	số lần nhập
+trg_check_stock_before_order:	kiểm tra tồn
+trg_set_cost_price:	snapshot giá vốn
+Trigger tự động tạo Cart cho user mới
+trg_create_cart_for_user:    tự động tạo Cart cho user mới
+Trigger cập nhật tồn kho khi hủy đơn hàng
+trg_restore_stock_when_order_cancel:   cập nhật tồn kho khi hủy đơn hàng
+trg_cancel_order_inventory:    ghi log khi đơn hàng bị hủy
+trg_check_sale_price:     kiểm tra giá bán
+
+
+
+===========================================================================================================================
+CREATE TRIGGER `trg\_cancel\_order\_inventory` AFTER UPDATE ON `orders`
+ FOR EACH ROW BEGIN
+    IF NEW.status='canceled' AND OLD.status <> 'canceled' THEN
+
+        INSERT INTO InventoryTransaction
+        (editionID,transactionType,quantityChange,createAt,referenceTable,referenceID)
+        SELECT
+            editionID,
+            'cancel_sale',
+            quantity,
+            NOW(),
+            'Orders',
+            NEW.orderID
+        FROM OrderDetail
+        WHERE orderID = NEW.orderID;
+
+    END IF;
+END
+
+CREATE TRIGGER `trg\_cart\_total\_quantity` AFTER INSERT ON `cartdetail`
+ FOR EACH ROW BEGIN
+    UPDATE Carts
+    SET totalQuantity = (
+        SELECT SUM(quantity)
+        FROM CartDetail
+        WHERE cartID = NEW.cartID
+    )
+    WHERE cartID = NEW.cartID;
+END
+
+CREATE TRIGGER `trg\_check\_sale\_price` BEFORE INSERT ON `orderdetail`
+ FOR EACH ROW BEGIN
+
+    DECLARE quoted DECIMAL(12,2);
+
+    -- lấy giá niêm yết
+    SELECT quotedPrice
+    INTO quoted
+    FROM edition
+    WHERE editionID = NEW.editionID;
+
+    -- kiểm tra giá bán >= giá nhập
+    IF NEW.salePrice < NEW.costPrice THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Sale price cannot be lower than cost price';
+    END IF;
+
+    -- kiểm tra giá bán <= giá niêm yết
+    IF NEW.salePrice > quoted THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Sale price cannot exceed quoted price';
+    END IF;
+
+END
+
+CREATE TRIGGER `trg\_check\_stock\_before\_order` BEFORE INSERT ON `orderdetail`
+ FOR EACH ROW BEGIN
+    DECLARE currentStock INT;
+
+    SELECT StockQuantity
+    INTO currentStock
+    FROM Edition
+    WHERE editionID = NEW.editionID;
+
+    IF currentStock < NEW.quantity THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Not enough stock';
+    END IF;
+
+END
+
+CREATE TRIGGER `trg\_create\_cart\_for\_user` AFTER INSERT ON `users`
+ FOR EACH ROW BEGIN
+    INSERT INTO Carts(userID,totalQuantity)
+    VALUES(NEW.userID,0);
+END
+
+CREATE TRIGGER `trg\_grn\_total\_after\_insert` AFTER INSERT ON `grn\_detail`
+ FOR EACH ROW BEGIN
+    UPDATE GoodReceivedNote
+    SET totalPrice = (
+        SELECT SUM(quantity * purchaseCost)
+        FROM GRN_Detail
+        WHERE grnID = NEW.grnID
+    )
+    WHERE grnID = NEW.grnID;
+END
+
+CREATE TRIGGER `trg\_inventory\_import` AFTER UPDATE ON `goodreceivednote`
+ FOR EACH ROW BEGIN
+    IF NEW.status = 'completed' AND OLD.status <> 'completed' THEN
+
+        INSERT INTO InventoryTransaction
+        (editionID, transactionType, quantityChange, createAt, referenceTable, referenceID)
+        SELECT
+            editionID,
+            'import',
+            quantity,
+            NOW(),
+            'GoodReceivedNote',
+            NEW.grnID
+        FROM GRN_Detail
+        WHERE grnID = NEW.grnID;
+
+    END IF;
+END
+
+CREATE TRIGGER `trg\_inventory\_sale` AFTER INSERT ON `orderdetail`
+ FOR EACH ROW BEGIN
+    INSERT INTO InventoryTransaction
+    (editionID, transactionType, quantityChange, createAt, referenceTable, referenceID)
+    VALUES
+    (NEW.editionID, 'sale', -NEW.quantity, NOW(), 'Orders', NEW.orderID);
+END
+
+CREATE TRIGGER `trg\_order\_total\_price` AFTER INSERT ON `orderdetail`
+ FOR EACH ROW BEGIN
+    UPDATE Orders
+    SET totalPrice = (
+        SELECT SUM(quantity * salePrice)
+        FROM OrderDetail
+        WHERE orderID = NEW.orderID
+    )
+    WHERE orderID = NEW.orderID;
+END
+
+CREATE TRIGGER `trg\_reduce\_stock\_after\_order` AFTER INSERT ON `orderdetail`
+ FOR EACH ROW BEGIN
+    UPDATE Edition
+    SET StockQuantity = StockQuantity - NEW.quantity
+    WHERE editionID = NEW.editionID;
+END
+
+CREATE TRIGGER `trg\_replenishment\_frequency` BEFORE INSERT ON `grn\_detail`
+ FOR EACH ROW BEGIN
+
+    SET NEW.replenishmentFrequence = (
+        SELECT COUNT(DISTINCT grnID)
+        FROM GRN_Detail
+        WHERE editionID = NEW.editionID
+    ) + 1;
+
+END
+
+CREATE TRIGGER `trg\_restore\_stock\_when\_order\_cancel` AFTER UPDATE ON `orders`
+ FOR EACH ROW BEGIN
+    IF NEW.status='canceled' AND OLD.status <> 'canceled' THEN
+ 
+        UPDATE Edition e
+        JOIN OrderDetail od
+        ON e.editionID = od.editionID
+        SET e.StockQuantity = e.StockQuantity + od.quantity
+        WHERE od.orderID = NEW.orderID;
+
+    END IF;
+END
+
+CREATE TRIGGER `trg\_set\_cost\_price` BEFORE INSERT ON `orderdetail`
+ FOR EACH ROW BEGIN
+    DECLARE avgCost DECIMAL(12,2);
+
+    SELECT AverageCost
+    INTO avgCost
+    FROM Edition
+    WHERE editionID = NEW.editionID;
+
+    SET NEW.costPrice = avgCost;
+END
+
+CREATE TRIGGER `trg\_update\_stock\_after\_grn` AFTER UPDATE ON `goodreceivednote`
+ FOR EACH ROW BEGIN
+    IF NEW.status = 'completed' AND OLD.status <> 'completed' THEN
+ 
+        UPDATE Edition e
+        JOIN (
+            SELECT editionID,
+                   SUM(quantity) AS qty,
+                   SUM(quantity * purchaseCost) AS totalCost
+            FROM GRN_Detail
+            WHERE grnID = NEW.grnID
+            GROUP BY editionID
+        ) d ON e.editionID = d.editionID
+        SET
+            e.AverageCost =
+                ((e.AverageCost * e.StockQuantity) + d.totalCost)
+                /
+                (e.StockQuantity + d.qty),
+            e.StockQuantity = e.StockQuantity + d.qty;
+
+    END IF;
+END

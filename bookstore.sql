@@ -66,7 +66,28 @@ INSERT INTO `books` (`bookID`, `bookName`, `authorName`) VALUES
 (4, 'Hội Chứng E', 'Franck Thilliez'),
 (5, 'Con Thỏ Nguyền Rủa', 'Chung Bora'),
 (6, 'Gửi Những Người Không Được Bảo Vệ', 'Nakayama Shichiri'),
-(7, 'KHÁCH SẠN MẶT NẠ', 'Higashino Keigo');
+(7, 'KHÁCH SẠN MẶT NẠ', 'Higashino Keigo'),
+(8, 'Người tốt lầu trên', 'Kevin Chen' ),
+(9, 'Nhà ảo thuật đen và những người phụ nữ thức tỉnh', 'Higashino Keigo'),
+(10, 'Thú hoang', 'Joel Dicker'),
+(11, 'Bài học tiếng Hy Lạp', 'Han Kang'),
+(12, 'Những kỳ án pháp y', 'Trần Ngọc Sơn'),
+(13, 'Khoa học về dinh dưỡng', 'DK'),
+(14, 'Thành phố và những bức tường bất định', 'Haruki Murakami'),
+(15, 'Tam Quốc Cổ Mật 2 - Rồng náu vực sâu', 'Mã Bá Dung'),
+(16, 'Ông nội vượt ngục', 'David Williams'),
+(17, 'Sự sống bất khả', 'Matt Haig'),
+(18, 'Lâu đài trên mây', 'Dianna Wynne Jones'),
+(19, 'Hỗn mang 1 - Đừng bao giờ buông dao', 'Patrick Ness'),
+(20, 'Gửi những người không được bảo vệ', 'Nakayama Shichiro'),
+(21, 'Tội ác và hình phạt', 'Fyodor Dostoevsky'),
+(22, 'Nhà giả kim', 'Paulo Coelho'),
+(23, 'Thanh xuân, sao mà đau đớn!', 'Random Kim'),
+(24, 'Cuộc chiến vi mạch', 'Chris Miller'),
+(25, 'Lâu đài bảy của pháp sư Howl', 'Dianna Wynne Jones'),
+(26, 'Một thoáng ta rực rỡ ở nhân gian', 'Ocean Vuong');
+
+
 
 -- --------------------------------------------------------
 

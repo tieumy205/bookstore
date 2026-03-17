@@ -4,6 +4,8 @@
     require "config/db.php";
     require "app/core/controller.php";
     require "app/core/Router.php";
+    require "app/views/header.php";
+    
 
 
     $url = $_GET['url'] ?? '';
@@ -33,3 +35,7 @@
     
 </body>
 </html>
+
+<?php
+require "app/views/footer.php";
+ ?>

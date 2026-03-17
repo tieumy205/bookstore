@@ -15,7 +15,7 @@
                 JOIN orderDetail od ON e.editionID = od.editionID
                 GROUP BY e.editionID, e.volumeID, e.quotedPrice, e.salePrice, v.volumeName, v.imageURL, b.bookName
                 ORDER BY total DESC
-                LIMIT 10
+                
             ");
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
