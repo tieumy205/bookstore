@@ -19,6 +19,7 @@
                 <form id="signupForm" >
                     <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập" required>
                     <input type="tel" class="form-control" id="numberPhone" placeholder="Số điện thoại" required>
+                    <input type="text" class="form-control" id="consigneeName" placeholder="Họ và tên" required>
                     <div class="formSelect">
                         <select name="" id="province">
                             <option value="">Chọn tỉnh/thành phố</option>

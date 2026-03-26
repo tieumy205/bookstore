@@ -2,6 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let loginForm = document.getElementById("loginForm");
 
     if (loginForm) {
+        const userID = localStorage.getItem("userID");
+        if(userID) {
+            localStorage.removeItem("userID");
+        }
         loginForm.addEventListener("submit", (e) => {
             e.preventDefault();
             auth();
@@ -42,6 +46,9 @@ async function auth() {
         console.log("Đăng nhập thành công");
         alert("Đăng nhập thành công");
         window.location.href = BASE_URL;
+        let userID = data.userID;
+        localStorage.setItem('userID', JSON.stringify(userID));
+
     } else {
         console.log("Lỗi đăng nhập: " + data.message);
         alert(data.message);

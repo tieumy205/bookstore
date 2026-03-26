@@ -4,6 +4,8 @@
     require "config/db.php";
     require "app/core/controller.php";
     require "app/core/Router.php";
+    require "app/views/header.php";
+    require "app/views/footer.php";
 
 
     $url = $_GET['url'] ?? '';
@@ -23,13 +25,15 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/css/owl.theme.default.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
     
 
 </head>
 <body>
     <a href="<?= BASE_URL ?>login">Login</a>
     <a href="<?= BASE_URL ?>register">Register</a>
-
-    
+    <a href="<?= BASE_URL ?>logout/logout">Logout</a>
+    <a href="<?= BASE_URL ?>checkout/getEditionCheckout/1">Checkout</a>
 </body>
 </html>

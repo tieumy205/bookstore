@@ -6,16 +6,22 @@
             $controllerName = !empty($parts[0]) ? ucfirst($parts[0]) . 'Controller' : 'HomeController';
             $actionName = !empty($parts[1]) ? $parts[1] : 'index';
             
-            $param = !empty($parts[2]) ? $parts[2] : null;
+            $param1 = !empty($parts[2]) ? $parts[2] : null;
+            $param2 = !empty($parts[3]) ? $parts[3] : null;
+
+            
 
             $controllerFile = "app/controllers/$controllerName.php";
             if(file_exists($controllerFile)) {
                 require_once $controllerFile;
                 if(class_exists($controllerName)) {
                     $controller = new $controllerName();
+                   
                     if(method_exists($controller, $actionName)) {
-                        if($param) {
-                            $controller->$actionName($param);
+                        if($param1 && $param2) {
+                            $controller->$actionName($param1, $param2);
+                        } elseif($param1){
+                            $controller->$actionName($param1);
                         } else {
                             $controller->$actionName();
                         }

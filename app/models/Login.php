@@ -24,12 +24,13 @@
             if($user && password_verify($password, $user['password'])) {
                 session_start();
                 $_SESSION['user'] = [
-                    'id' => $user['id'],
+                    'id' => $user['userID'],
                     'username' => $user['userName'],
                     'role' => $user['role']
                 ];
                 return [
                     "status" => "success",
+                    "user" => $user['userID'],
                     "message" => "Đăng nhập thành công"
                 ];
             } else {

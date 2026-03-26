@@ -35,6 +35,7 @@
                 ob_end_clean();
                 echo json_encode([
                     'success' => true,
+                    'userID' => $result['user'],
                     'message' => "Đăng nhập thành công"
                 ]);
                 exit();

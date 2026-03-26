@@ -50,6 +50,8 @@ async function loadProvinces() {
     }
 }
 
+
+
 async function signup() {
 
     let username = document.getElementById("username").value.trim();
@@ -57,6 +59,7 @@ async function signup() {
     let confirmPassword = document.getElementById("confirmPassword").value.trim();
     let numberPhone = document.getElementById("numberPhone").value.trim();
     let detailAddress = document.getElementById("detailAddress").value.trim();
+    let consigneeName = document.getElementById("consigneeName").value.trim();
 
     let provinceCode = document.getElementById("province").value;
     let districtCode = document.getElementById("district").value;
@@ -64,12 +67,31 @@ async function signup() {
     let provinceName = document.getElementById("province").selectedOptions[0].text;
     let districtName = document.getElementById("district").selectedOptions[0].text;
 
+    const userNameRegex = /^[A-Za-zÀ-ỹ\s]+$/;
+    const numberPhoneRegex = /^0\d{9}$/;
+    const consigneeNameRegex = /^[A-Za-zÀ-ỹ\s]+$/;
+    
+    if(!userNameRegex.test(username)) {
+        alert("Tên đăng nhập không hợp lại. Vui lòng nhập lại!");
+        return;
+    }
+
+    if(!numberPhoneRegex.test(numberPhone)) {
+        alert("Số điện thoại không hợp lại. Vui lòng nhập lại!");
+        return;
+    }
+
+    if(!consigneeNameRegex.test(consigneeName)) {
+        alert("Họ và tên không hợp lại. Vui lòng nhập lại!");
+        return;
+    }
+
     if(password !== confirmPassword){
         alert("Mật khẩu không khớp");
         return;
     }
 
-    if(!username || !password || !numberPhone || !provinceCode || !districtCode || !detailAddress){
+    if(!username || !password || !numberPhone || !provinceCode || !districtCode || !detailAddress || !consigneeName){
         alert("Vui lòng điền đầy đủ thông tin");
         return;
     }
@@ -82,7 +104,8 @@ async function signup() {
             numberPhone,
             province: provinceName,
             district: districtName,
-            detailAddress
+            detailAddress,
+            consigneeName
         });
 
         const res = await fetch(BASE_URL + "register/register", {

@@ -27,8 +27,9 @@
             $province = $_POST['province'] ?? '';
             $district = $_POST['district'] ?? '';
             $detailAddress = $_POST['detailAddress'] ?? '';
+            $consigneeName = $_POST['consigneeName'] ?? '';
 
-            if (!$username || !$password || !$numberPhone || !$province || !$district || !$detailAddress) {
+            if (!$username || !$password || !$numberPhone || !$province || !$district || !$detailAddress || !$consigneeName) {
                 ob_end_clean();
                 echo json_encode(['success' => false, 'message' => 'Vui lòng điền đầy đủ thông tin']);
                 exit();
@@ -37,7 +38,7 @@
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
             try {
-                $result = Register::addUser($username, $hash, $numberPhone, $province, $district, $detailAddress);
+                $result = Register::addUser($username, $hash, $numberPhone, $province, $district, $detailAddress, $consigneeName);
                 if (is_array($result) && isset($result['status']) && $result['status'] === 'error') {
                     ob_end_clean();
                     echo json_encode(['success' => false, 'message' => $result['message']]);

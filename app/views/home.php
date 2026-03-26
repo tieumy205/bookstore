@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script>var BASE_URL = <?= BASE_URL ?></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/css/owl.carousel.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/css/owl.theme.default.min.css">
@@ -34,11 +35,13 @@
                     <div class="icon-quote"></div>
                     <div class="quote-content"></div>
                 </div>
+    
                 <div class="book-image">
                     <img src="" alt="">
                 </div>
             </div>
             <div class="fashsale"></div>
+
             <div class="newly-published">
                 <div class="heading">
                     <p class="heading">Sách mới xuất bản</p>
@@ -53,9 +56,33 @@
                     </div>
                 </div>
             </div>
+
+            <div class="allProduct">
+                <div class="heading">
+                    <p class="heading">Tất cả sản phẩm</p>
+                    <div class="line"></div>
+                </div>
+                <div class="container">
+                    <div class="text">
+                        <button class="viewBtn">Xem tất cả</button>
+                    </div>
+                    <div class="products" id="all-books">
+                        
+                    </div>
+                    <div id="pagination">
+
+                    </div>
+                </div>  
+            </div>
+
+            <div>
+                <a href="<?= BASE_URL ?>bookList/getBooksBy/1/1">thể loại văn học</a>
+                <a href="<?= BASE_URL ?>history/getOrder">Lịch sử đơn hàng</a>
+            </div>
         </div>
         <script src="<?= BASE_URL ?>app/assets/js/jquery.min.js"></script>
         <script src="<?= BASE_URL ?>app/assets/js/owl.carousel.min.js"></script>
         <script src="<?= BASE_URL ?>app/assets/js/home.js"></script>
+        <script src="<?= BASE_URL ?>app/assets/js/bookDetail.js"></script>
     </body>
 </html>
