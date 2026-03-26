@@ -81,4 +81,155 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     }
 
+    const sliders = document.querySelectorAll(".slider-wrapper");
+
+    sliders.forEach(slider => {
+
+        const track = slider.querySelector(".slider-track");
+        const container = slider.querySelector(".slider-container");
+        const prevBtn = slider.querySelector(".slider-btn.prev");
+        const nextBtn = slider.querySelector(".slider-btn.next");
+
+        if (!track || !container) return;
+
+        let currentPosition = 0;
+        let autoSlideInterval;
+
+        const GAP = 20;
+        const AUTO_TIME = 4000;
+
+        const getCardWidth = () => {
+            const card = slider.querySelector(".product-card");
+            return card ? card.offsetWidth + GAP : 0;
+        };
+
+        const getStep = () => {
+            const w = window.innerWidth;
+            if (w < 768) return 1;
+            if (w < 1024) return 2;
+            return 3;
+        };
+
+        const getMaxTranslate = () => {
+            return track.scrollWidth - container.offsetWidth;
+        };
+
+        const updateSlider = () => {
+            track.style.transform = `translateX(${currentPosition}px)`;
+        };
+
+        const slideNext = () => {
+            const move = getCardWidth() * getStep();
+            const maxTranslate = getMaxTranslate();
+
+            currentPosition -= move;
+
+            if (Math.abs(currentPosition) >= maxTranslate) {
+                currentPosition = -maxTranslate;
+            }
+
+            updateSlider();
+        };
+
+        const slidePrev = () => {
+            const move = getCardWidth() * getStep();
+
+            currentPosition += move;
+
+            if (currentPosition > 0) currentPosition = 0;
+
+            updateSlider();
+        };
+
+        const startAutoSlide = () => {
+            stopAutoSlide();
+
+            autoSlideInterval = setInterval(() => {
+
+                if (Math.abs(currentPosition) >= getMaxTranslate()) {
+                    currentPosition = 0;
+                } else {
+                    slideNext();
+                }
+
+                updateSlider();
+
+            }, AUTO_TIME);
+        };
+
+        const stopAutoSlide = () => {
+            clearInterval(autoSlideInterval);
+        };
+
+        nextBtn.addEventListener("click", () => {
+            slideNext();
+            startAutoSlide();
+        });
+
+        prevBtn.addEventListener("click", () => {
+            slidePrev();
+            startAutoSlide();
+        });
+
+        container.addEventListener("mouseenter", stopAutoSlide);
+        container.addEventListener("mouseleave", startAutoSlide);
+
+        window.addEventListener("resize", () => {
+            currentPosition = 0;
+            updateSlider();
+        });
+
+        track.style.transition = "transform 0.5s ease";
+
+        startAutoSlide();
+
+    });
+
+
+    /* BOOK QUOTE SECTION */
+
+    const quotes = window.bookQuotes || [];
+
+    const quoteText = document.querySelector(".quote-text");
+    const quoteBookImg = document.querySelector("#quoteBookImg");
+    const quoteBookLink = document.querySelector("#quoteBookLink");
+    const dots = document.querySelectorAll(".dot");
+
+    if (quotes.length && quoteText && quoteBookImg && quoteBookLink) {
+
+        const changeQuote = (index) => {
+
+            quoteText.textContent = quotes[index].quote;
+            quoteBookImg.src = "picture/books/" + quotes[index].img;
+            quoteBookLink.href = quotes[index].link;
+
+            dots.forEach(d => d.classList.remove("active"));
+            if (dots[index]) dots[index].classList.add("active");
+        };
+
+        dots.forEach(dot => {
+
+            dot.addEventListener("click", () => {
+                const index = dot.dataset.index;
+                changeQuote(index);
+            });
+
+        });
+
+        let currentQuote = 0;
+
+        setInterval(() => {
+
+            currentQuote++;
+
+            if (currentQuote >= quotes.length) {
+                currentQuote = 0;
+            }
+
+            changeQuote(currentQuote);
+
+        }, 5000);
+
+    }
+
 });

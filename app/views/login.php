@@ -28,7 +28,7 @@
                         <a href="#" class="forgot-link">Quên mật khẩu?</a>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                    <button type="submit" class="btn-primary">Đăng nhập</button>
                     
                     <div class="signup-text">
                         Bạn chưa có tài khoản? <a href="<?= BASE_URL ?>/register">Đăng ký</a>
