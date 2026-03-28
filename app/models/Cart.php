@@ -3,7 +3,7 @@
     class Cart {
         public static function getItemCart() {
             if(!isset($_SESSION['user'])) {
-                throw new Exception("Không có user111111");
+                throw new Exception("Người dùng chưa đăng nhập/ đăng ký");
             } 
             // var_dump($_SESSION['user']);
             // exit();

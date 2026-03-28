@@ -101,6 +101,8 @@ async function loadCart(items) {
             calTotalPrice();
         } else {
             console.error(data.message);
+            alert(data.message);
+            return;
         }
     } catch(e) {
         console.error("Lỗi tải giỏ hàng:", e);

@@ -15,7 +15,7 @@
         <div class="row">
             <!-- Cart Items -->
             <div class="col-lg-8">
-                <div id="cartHeader" class="cart-header d-flex align-items-center mb-2" style="padding-left: 35px;">
+                <div id="cartHeader" class="cart-header align-items-center mb-2" style="padding-left: 35px;">
                     <input type="checkbox" id="selectAll" class="me-2 item-checkbox" onchange="toggleSelectAll(this)">
                     <label for="selectAll" class="mb-0">Chọn tất cả</label>
                 </div>
