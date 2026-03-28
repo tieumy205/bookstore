@@ -84,5 +84,6 @@
 <script src="<?= BASE_URL ?>app/assets/js/jquery.min.js"></script>
 <script src="<?= BASE_URL ?>app/assets/js/owl.carousel.min.js"></script>
 <script src="<?= BASE_URL ?>app/assets/js/bookDetail.js"></script>
+<script src="<?= BASE_URL ?>app/assets/js/header.js"></script>
 </body>
 </html>

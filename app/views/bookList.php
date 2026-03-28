@@ -13,26 +13,26 @@
 <body>
     <div class="container booklist-layout">
         <aside id="filter" class="booklist-filter">
-            <h3>Lọc theo giá tiền</h3>
             <div class="filter-price">
+                <h3>Lọc theo giá tiền</h3>
 
                 <div id="price">
-                    <input type="text"> -
-                    <input type="text" >
+                    <input type="text" id="minPrice"> -
+                    <input type="text" id="maxPrice" >
                 </div>
-                <button id="btn-filter">Filter</button>
+                <button class="btn btn-filter"  type="submit"></button>
                 
             </div>
-
-            <h3 class="filter-title">Thể loại</h3>
-            <ul class="category-list" id="categoryList">
-                
-            </ul>
-
-            <h3 class="filter-title">Mạng xã hội</h3>
-            <div class="social-row">
-                
+            <div>
+                <h3 class="filter-title">Thể loại</h3>
+                <ul class="category-list" id="categoryList"></ul>
             </div>
+            
+            <div>
+                <h3 class="filter-title">Mạng xã hội</h3>
+                <div class="social-row">
+            </div>
+            
         </aside>
 
         <main id="bookList" class="booklist-main">
@@ -61,9 +61,14 @@
                 
             </nav>
         </main>
+            
     </div>
+
+        
+   
 
     <script src="<?= BASE_URL ?>app/assets/js/bookList.js"></script>
     <script src="<?= BASE_URL ?>app/assets/js/bookDetail.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/js/header.js"></script>
 </body>
 </html>

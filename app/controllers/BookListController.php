@@ -6,7 +6,7 @@
             $this->view('bookList');
         }
 
-        public function getBooksBy($categoryID, $page) {
+        public function getBooks() {
             try {
                 // Nếu người dùng truy cập trực tiếp trên trình duyệt (không phải AJAX),
                 // ưu tiên render trang (index). Dữ liệu sẽ được JS fetch sau.
@@ -25,11 +25,16 @@
                 
                 $limit = 12;
                 
-                $page = (int)$page;
+                $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+                $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                $categoryID = isset($_GET['categoryID']) ? trim($_GET['categoryID']) : '';
+                $minPrice = isset($_GET['minPrice']) ? trim($_GET['minPrice']) : '';
+                $maxPrice = isset($_GET['maxPrice']) ? trim($_GET['maxPrice']) : '';
+                $sort = isset($_GET['sort']) ? trim($_GET['sort']) : 'newest';
                 if ($page < 1) $page = 1;
 
-                $result = BookList::getBookBy($categoryID, $page);
-                $countBook = BookList::getCountBook($categoryID);
+                $result = BookList::getBookBy($search, $categoryID, $page, $minPrice, $maxPrice, $sort);
+                $countBook = BookList::getCountBook($search, $categoryID, $minPrice, $maxPrice);
                 $totalPage = ceil($countBook/$limit);
                 ob_end_clean();
                 echo json_encode([
@@ -88,5 +93,7 @@
                 exit();
             }
         }
+
+        
     }
 ?>

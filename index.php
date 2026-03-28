@@ -4,13 +4,10 @@
     require "config/db.php";
     require "app/core/controller.php";
     require "app/core/Router.php";
-    require "app/views/header.php";
-    require "app/views/footer.php";
 
 
     $url = $_GET['url'] ?? '';
     $router = new Router();
-    $router->dispatch($url);
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +16,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <base href="http://localhost/bookstore/">
+    <!-- <base href="http://localhost/bookstore/"> -->
     <script>var BASE_URL = "<?= BASE_URL ?>";</script>
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/css/owl.carousel.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/css/owl.theme.default.min.css">
@@ -31,9 +28,10 @@
 
 </head>
 <body>
-    <a href="<?= BASE_URL ?>login">Login</a>
-    <a href="<?= BASE_URL ?>register">Register</a>
-    <a href="<?= BASE_URL ?>logout/logout">Logout</a>
-    <a href="<?= BASE_URL ?>checkout/getEditionCheckout/1">Checkout</a>
+    <?php require "app/views/header.php"; ?>
+
+    <?php $router->dispatch($url); ?>
+
+    <?php require "app/views/footer.php"; ?>
 </body>
 </html>

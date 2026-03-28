@@ -19,5 +19,6 @@
 </div>
 
 <script src="<?= BASE_URL ?>app/assets/js/history.js"></script>
+<script src="<?= BASE_URL ?>app/assets/js/header.js"></script>
 </body>
 </html>
