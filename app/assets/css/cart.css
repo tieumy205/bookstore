@@ -59,7 +59,7 @@
 
 .container-shopping .item-price {
     font-size: 16px;
-    color: #e94560;
+    color: #F45308;
     font-weight: 600;
 }
 
@@ -153,7 +153,7 @@
 .container-shopping .btn-checkout {
     width: 100%;
     padding: 12px;
-    background: #e94560;
+    background: #F45308;
     color: white;
     border: none;
     border-radius: 4px;
@@ -164,5 +164,5 @@
 }
 
 .container-shopping .btn-checkout:hover {
-    background: #d63384;
+    background: #d64506;
 } 

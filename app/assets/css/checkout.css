@@ -1,5 +1,5 @@
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     background: #f5f5f5;
     margin: 0;
 }
@@ -69,7 +69,7 @@ body {
 }
 
 .product-info .price {
-    color: #e94560;
+    color: #F45308;
     font-weight: bold;
 }
 
@@ -127,7 +127,7 @@ button {
 #checkout-container .button-checkout {
     width: 100%;
     padding: 12px;
-    background: #e94560;
+    background: #F45308;
     color: white;
     border: none;
     border-radius: 4px;
@@ -138,10 +138,10 @@ button {
 }
 
 #checkout-container .button-checkout:hover {
-    background-color: brown;
+    background-color: #d64506;
     color: white;
 }
 
 #checkout-container .button-checkout:active {
-    background-color: #8b0000;
+    background-color: #ba3903;
 }

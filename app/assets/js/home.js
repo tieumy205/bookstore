@@ -39,6 +39,8 @@ function wireBookDetailClicks(container) {
     });
 }
 
+
+
 async function loadBestSellers() {
 
     const container = document.getElementById("best-seller-books");
@@ -79,9 +81,9 @@ async function loadBestSellers() {
                         </div>
                     </div>
 
-                    <div class="btn" >
-                        <button class="btn btn-addCart" data-id="${book.editionID}">Thêm vào giỏ hàng</button>
-                        <button class="btn btn-buyNow" data-id="${book.editionID}">Mua ngay</button>
+                    <div class="action-buttons" >
+                        <button class="btn-addCart" data-id="${book.editionID}">Thêm vào giỏ hàng</button>
+                        <button class="btn-buyNow" data-id="${book.editionID}">Mua ngay</button>
                     </div>
 
                 </div>
@@ -97,7 +99,11 @@ async function loadBestSellers() {
             loop:true,
             margin:10,
             nav:true,
+            navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
             dots:false,
+            autoplay: true,
+            autoplayTimeout: 3000,
+            autoplayHoverPause: true,
             responsive:{
                 0:{items:1},
                 600:{items:3},
@@ -147,9 +153,9 @@ async function loadNewBooks() {
                                 </div>
                             </div>
 
-                            <div class="btn" >
-                                <button class="btn btn-addCart" data-id="${book.editionID}">Thêm vào giỏ hàng</button>
-                                <button class="btn btn-buyNow" data-id="${book.editionID}">Mua ngay</button>
+                            <div class="action-buttons" >
+                                <button class="btn-addCart" data-id="${book.editionID}">Thêm vào giỏ hàng</button>
+                                <button class="btn-buyNow" data-id="${book.editionID}">Mua ngay</button>
                             </div>
 
                         </div>
@@ -163,7 +169,11 @@ async function loadNewBooks() {
                     loop: true,
                     margin: 10,
                     nav: true,
+                    navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
                     dots: false,
+                    autoplay: true,
+                    autoplayTimeout: 3000,
+                    autoplayHoverPause: true,
                     responsive: {
                         0: { items: 1 },
                         600: { items: 3 },
@@ -214,9 +224,9 @@ async function loadBooks(page = 1) {
                                 </div>
                             </div>
 
-                            <div class="btn" >
-                                <button class="btn btn-addCart" data-id="${book.editionID}">Thêm vào giỏ hàng</button>
-                                <button class="btn btn-buyNow" data-id="${book.editionID}">Mua ngay</button>
+                            <div class="action-buttons" >
+                                <button class="btn-addCart" data-id="${book.editionID}">Thêm vào giỏ hàng</button>
+                                <button class="btn-buyNow" data-id="${book.editionID}">Mua ngay</button>
                             </div>
 
                         </div>

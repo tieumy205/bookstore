@@ -7,52 +7,50 @@
 }
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: inherit;
 }
 
 html {
-    font-size: 62.5%;
+    font-size: 100%;
     line-height: 1.6rem;
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 body {
-    font-family: "Roboto", sans-serif;
+    font-family: "Inter", sans-serif;
     background-color: #fafafa;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
 
-.roboto-light {
-    font-family: "Roboto", sans-serif;
+.inter-light {
+    font-family: "Inter", sans-serif;
     font-weight: 300;
     font-style: normal;
   }
   
-  .roboto-regular {
-    font-family: "Roboto", sans-serif;
+  .inter-regular {
+    font-family: "Inter", sans-serif;
     font-weight: 400;
     font-style: normal;
   }
   
-  .roboto-medium {
-    font-family: "Roboto", sans-serif;
+  .inter-medium {
+    font-family: "Inter", sans-serif;
     font-weight: 500;
     font-style: normal;
   }
   
-  .roboto-bold {
-    font-family: "Roboto", sans-serif;
+  .inter-bold {
+    font-family: "Inter", sans-serif;
     font-weight: 700;
     font-style: normal;
   }
   
-  .roboto-light-italic {
-    font-family: "Roboto", sans-serif;
+  .inter-light-italic {
+    font-family: "Inter", sans-serif;
     font-weight: 300;
     font-style: italic;
   }
@@ -106,10 +104,16 @@ body {
     opacity: 0.8;
   }
 
-  /* ===== Carousel Products ===== */
+  /* ===== Custom Slider Products ===== */
+  .owl-carousel.products {
+      padding: 10px 0;
+      width: 100%;
+  }
+
   .owl-carousel.products .item {
-    display: flex;
-    justify-content: center;
+      display: flex;
+      justify-content: center;
+      height: 100%;
   }
 
   .owl-carousel.products .item .card {
@@ -154,6 +158,7 @@ body {
     min-height: 30px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: 1.4;
@@ -176,7 +181,7 @@ body {
   .owl-carousel.products .item .salePrice {
     margin: 0;
     font-size: 1.3rem;
-    color: var(--yellow-color);
+    color: #F45308;
     font-weight: 600;
   }
 
@@ -191,9 +196,9 @@ body {
     flex: 1;
     min-width: 45%;
     padding: 8px 12px;
-    border: 1px solid var(--yellow-color);
+    border: 1px solid #143673;
     background-color: transparent;
-    color: var(--yellow-color);
+    color: #143673;
     font-size: 1.2rem;
     border-radius: 3px;
     cursor: pointer;
@@ -202,7 +207,7 @@ body {
   }
 
   .owl-carousel.products .item .btn-addCart:hover {
-    background-color: var(--yellow-color);
+    background-color: #143673;
     color: var(--white-color);
   }
 
@@ -210,9 +215,9 @@ body {
     flex: 1;
     min-width: 45%;
     padding: 8px 12px;
-    background-color: var(--yellow-color);
+    background-color: #F45308;
     color: var(--white-color);
-    border: 1px solid var(--yellow-color);
+    border: none;
     font-size: 1.2rem;
     border-radius: 3px;
     cursor: pointer;
@@ -221,8 +226,7 @@ body {
   }
 
   .owl-carousel.products .item .btn-buyNow:hover {
-    background-color: transparent;
-    color: var(--yellow-color);
+    background-color: #d64506;
   }
 
   /* ===== All Products Grid Section ===== */
@@ -328,6 +332,7 @@ body {
     min-height: 30px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: 1.4;
@@ -350,7 +355,7 @@ body {
   .products:not(.owl-carousel) .item .salePrice {
     margin: 0;
     font-size: 1.3rem;
-    color: var(--yellow-color);
+    color: #F45308;
     font-weight: 600;
   }
 
@@ -365,9 +370,9 @@ body {
     flex: 1;
     min-width: 45%;
     padding: 8px 12px;
-    border: 1px solid var(--yellow-color);
+    border: 1px solid #143673;
     background-color: transparent;
-    color: var(--yellow-color);
+    color: #143673;
     font-size: 1.2rem;
     border-radius: 3px;
     cursor: pointer;
@@ -376,7 +381,7 @@ body {
   }
 
   .products:not(.owl-carousel) .item .btn-addCart:hover {
-    background-color: var(--yellow-color);
+    background-color: #143673;
     color: var(--white-color);
   }
 
@@ -384,9 +389,9 @@ body {
     flex: 1;
     min-width: 45%;
     padding: 8px 12px;
-    background-color: var(--yellow-color);
+    background-color: #F45308;
     color: var(--white-color);
-    border: 1px solid var(--yellow-color);
+    border: none;
     font-size: 1.2rem;
     border-radius: 3px;
     cursor: pointer;
@@ -395,8 +400,7 @@ body {
   }
 
   .products:not(.owl-carousel) .item .btn-buyNow:hover {
-    background-color: transparent;
-    color: var(--yellow-color);
+    background-color: #d64506;
   }
 
   /* ===== Pagination ===== */

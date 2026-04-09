@@ -75,7 +75,7 @@
 #productPrice {
     font-size: 1.8rem;
     font-weight: 600;
-    color: #dc3545;
+    color: #F45308;
     margin-bottom: 1.5rem;
 }
 
@@ -109,7 +109,7 @@
 
 .product-specifications li:before {
     content: "•";
-    color: #0d6efd;
+    color: #F45308;
     position: absolute;
     left: 0;
 }
@@ -156,37 +156,38 @@
 }
 
 .product-actions .btn-addCart{
-    border: 1px solid #669BBC;
+    border: 1px solid #143673;
     border-radius: 8px;
     padding: 8px 18px;
-    background-color: #669BBC;
+    background-color: #143673;
     color: #FFFCFC;
 }
 
 .product-actions .btn-addCart:hover {
-    background-color: #3f8cbb;
-    color: white;
+    background-color: transparent;
+    color: #143673;
 }
 
 .product-actions .btn-addCart:active {
-    background-color: #444;
+    background-color: #0d2552;
 }
 
 .product-actions .btn-buyNow {
-    background-color: rgb(193 18 31 / 60%);
+    background-color: #F45308;
     color: #FFFCFC;
     border: none;
     margin-bottom: 5px;
     padding: 8px 14px;
+    border-radius: 8px;
 }
 
 .product-actions .btn-buyNow:hover {
-    background-color: #e94560;
+    background-color: #d64506;
     color: white;
 }
 
 .product-actions .btn-buyNow:active {
-    background-color: brown;
+    background-color: #ba3903;
 }
 
 /* Product Details Tabs */
@@ -255,7 +256,7 @@
 
 .tab-pane ul li:before {
     content: "•";
-    color: #0d6efd;
+    color: #F45308;
     position: absolute;
     left: 0;
 }

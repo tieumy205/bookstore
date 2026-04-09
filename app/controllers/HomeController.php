@@ -118,5 +118,17 @@ class HomeController extends Controller {
             exit();
         }
     }
+    public function showHomePage() {
+        $quotes = [];
+        try {
+            $quotes = Home::getQuotes();
+        } catch (Exception $e) {
+            // Xử lý lỗi nếu cần
+        }
+
+        $this->view("home", [
+            "quotes" => $quotes
+        ]);
+    }
 }
 ?>

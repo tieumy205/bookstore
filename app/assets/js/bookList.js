@@ -15,11 +15,31 @@ document.addEventListener("DOMContentLoaded", async () => {
         const params = getCurrentParams();
         currentParams = { ...currentParams, ...params };
         
-        if (filterBtn) {
-            filterBtn.textContent = "Lọc";
-            filterBtn.addEventListener("click", (e) => {
-                e.preventDefault();
-                applyFilter(currentParams);
+        const priceSelect = document.getElementById("priceSelect");
+        if(priceSelect) {
+            if(currentParams.minPrice || currentParams.maxPrice) {
+                const targetVal = `${currentParams.minPrice}-${currentParams.maxPrice}`;
+                const options = Array.from(priceSelect.options).map(o => o.value);
+                if(options.includes(targetVal)) {
+                    priceSelect.value = targetVal;
+                } else if(!currentParams.minPrice && options.includes(`0-${currentParams.maxPrice}`)) {
+                    priceSelect.value = `0-${currentParams.maxPrice}`;
+                }
+            }
+            
+            priceSelect.addEventListener("change", (e) => {
+                const val = e.target.value;
+                if(val) {
+                    const parts = val.split('-');
+                    currentParams.minPrice = parts[0];
+                    currentParams.maxPrice = parts[1];
+                } else {
+                    currentParams.minPrice = "";
+                    currentParams.maxPrice = "";
+                }
+                currentParams.page = 1;
+                updateURL(currentParams);
+                loadBooks(currentParams);
             });
         }
 
@@ -127,7 +147,13 @@ function getFromPath() {
 
 async function loadBooks(params) {
     try{
-        const query = new URLSearchParams(params).toString();
+        // Loại bỏ minPrice và maxPrice khỏi query để server trả về sách theo trang, 
+        // sau đó thuật toán JS sẽ đảm nhiệm phần lọc giá
+        const fetchParams = { ...params };
+        delete fetchParams.minPrice;
+        delete fetchParams.maxPrice;
+
+        const query = new URLSearchParams(fetchParams).toString();
 
         const res = await fetch(BASE_URL + `bookList/getBooks?${query}`, {
             headers: { "X-Requested-With": "XMLHttpRequest" }
@@ -140,7 +166,20 @@ async function loadBooks(params) {
             return;
         };
         const bookListContainer = document.getElementById("list");
-        const books = Array.isArray(data.data) ? data.data : [];
+        let books = Array.isArray(data.data) ? data.data : [];
+
+        // Thuật toán JS để lọc danh sách sách theo giá tiền
+        if (params.minPrice !== "" || params.maxPrice !== "") {
+            const min = params.minPrice !== "" ? parseInt(params.minPrice) : 0;
+            const max = params.maxPrice !== "" ? parseInt(params.maxPrice) : Infinity;
+
+            books = books.filter(book => {
+                // Ưu tiên theo salePrice, nếu không có salePrice thì lấy quotedPrice
+                const bookPrice = book.salePrice ? parsePriceToInt(book.salePrice) : parsePriceToInt(book.quotedPrice);
+                return bookPrice >= min && bookPrice <= max;
+            });
+        }
+
         renderBooks(books);
         updateResultCount(books.length);
         renderPagination(data.pagination.totalPage, data.pagination.currentPage, params);
@@ -174,9 +213,9 @@ function renderBooks(books){
                         </div>
                     </div>
 
-                    <div class="btn">
-                        <button class="btn btn-addCart" data-id="${book.editionID}">Thêm vào giỏ hàng</button>
-                        <button class="btn btn-buyNow" data-id="${book.editionID}">Mua ngay</button>
+                    <div class="action-buttons">
+                        <button class="btn-addCart" data-id="${book.editionID}">Thêm vào giỏ hàng</button>
+                        <button class="btn-buyNow" data-id="${book.editionID}">Mua ngay</button>
                     </div>
 
                 </div>
@@ -194,15 +233,7 @@ function updateResultCount(count) {
     }
 }
 
-function applyFilter(currentParams){
 
-    currentParams.minPrice = document.getElementById("minPrice").value;
-    currentParams.maxPrice = document.getElementById("maxPrice").value;
-    currentParams.page = 1;
-
-    updateURL(currentParams);
-    loadBooks(currentParams);
-}
 
 
 
@@ -307,4 +338,3 @@ async function getCategories(currentParams) {
 
     }
 }
-

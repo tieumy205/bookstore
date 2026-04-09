@@ -7,32 +7,29 @@
     <title>Book List</title>
     <script>var BASE_URL = "<?= BASE_URL ?>";</script>
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/css/base.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/css/home.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>app/assets/css/bookList.css">
-    
 </head>
 <body>
     <div class="container booklist-layout">
         <aside id="filter" class="booklist-filter">
-            <div class="filter-price">
-                <h3>Lọc theo giá tiền</h3>
-
-                <div id="price">
-                    <input type="text" id="minPrice"> -
-                    <input type="text" id="maxPrice" >
+            <div class="filter-group">
+                <h3 class="filter-title">Lọc theo giá tiền</h3>
+                <div class="price-input-group" id="price">
+                    <select id="priceSelect" class="price-select">
+                        <option value="">Tất cả mức giá</option>
+                        <option value="0-50000">0 - 50.000đ</option>
+                        <option value="50000-100000">50.000 - 100.000đ</option>
+                        <option value="100000-500000">100.000 - 500.000đ</option>
+                        <option value="500000-1000000">500.000 - 1.000.000đ</option>
+                    </select>
                 </div>
-                <button class="btn btn-filter"  type="submit"></button>
-                
             </div>
-            <div>
+            
+            <div class="filter-group">
                 <h3 class="filter-title">Thể loại</h3>
                 <ul class="category-list" id="categoryList"></ul>
             </div>
-            
-            <div>
-                <h3 class="filter-title">Mạng xã hội</h3>
-                <div class="social-row">
-            </div>
-            
         </aside>
 
         <main id="bookList" class="booklist-main">

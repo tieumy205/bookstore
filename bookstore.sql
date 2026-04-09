@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 10, 2026 at 01:51 AM
+-- Generation Time: Apr 06, 2026 at 01:30 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -32,16 +32,19 @@ CREATE TABLE `address` (
   `userID` int(11) NOT NULL,
   `detailAddress` text NOT NULL,
   `province` varchar(255) NOT NULL,
-  `district` varchar(255) NOT NULL
+  `district` varchar(255) NOT NULL,
+  `isDefault` tinyint(1) DEFAULT NULL,
+  `consigneeName` varchar(255) DEFAULT NULL,
+  `numberPhone` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `address`
 --
 
-INSERT INTO `address` (`addressID`, `userID`, `detailAddress`, `province`, `district`) VALUES
-(1, 1, 'đường Nguyễn Văn Linh', 'Tỉnh Hà Giang', 'Huyện Mèo Vạc'),
-(2, 2, 'đường 111, ấp 45', 'Tỉnh Cao Bằng', 'Huyện Bảo Lạc');
+INSERT INTO `address` (`addressID`, `userID`, `detailAddress`, `province`, `district`, `isDefault`, `consigneeName`, `numberPhone`) VALUES
+(1, 1, 'đường Nguyễn Văn Linh', 'Tỉnh Hà Giang', 'Huyện Mèo Vạc', 1, 'Tiểu My', '0111111111'),
+(2, 2, 'đường 111, ấp 45', 'Tỉnh Cao Bằng', 'Huyện Bảo Lạc', 1, 'Thanh Thảo', '0222222222');
 
 -- --------------------------------------------------------
 
@@ -67,7 +70,7 @@ INSERT INTO `books` (`bookID`, `bookName`, `authorName`) VALUES
 (5, 'Con Thỏ Nguyền Rủa', 'Chung Bora'),
 (6, 'Gửi Những Người Không Được Bảo Vệ', 'Nakayama Shichiri'),
 (7, 'KHÁCH SẠN MẶT NẠ', 'Higashino Keigo'),
-(8, 'Người tốt lầu trên', 'Kevin Chen' ),
+(8, 'Người tốt lầu trên', 'Kevin Chen'),
 (9, 'Nhà ảo thuật đen và những người phụ nữ thức tỉnh', 'Higashino Keigo'),
 (10, 'Thú hoang', 'Joel Dicker'),
 (11, 'Bài học tiếng Hy Lạp', 'Han Kang'),
@@ -85,9 +88,15 @@ INSERT INTO `books` (`bookID`, `bookName`, `authorName`) VALUES
 (23, 'Thanh xuân, sao mà đau đớn!', 'Random Kim'),
 (24, 'Cuộc chiến vi mạch', 'Chris Miller'),
 (25, 'Lâu đài bảy của pháp sư Howl', 'Dianna Wynne Jones'),
-(26, 'Một thoáng ta rực rỡ ở nhân gian', 'Ocean Vuong');
-
-
+(26, 'Một thoáng ta rực rỡ ở nhân gian', 'Ocean Vuong'),
+(27, 'Dưới lớp da người', 'Hà Kim Ngân'),
+(28, 'Đời gió bụi', 'Nguyễn Phan Quế Mai'),
+(29, 'Tuổi trẻ đáng giá bao nhiêu', 'Rosie Nguyễn'),
+(30, 'Ta ba lô trên đất Á', 'Rosie Nguyễn'),
+(31, 'Đời là những niềm vui bé nhỏ', 'Hạ Dữ Chí'),
+(32, 'Tam thể 2 - Khu rừng đen tối', 'Lưu Từ Hân'),
+(33, 'Sự thịnh vượng của các quốc gia', 'Adam Smith'),
+(34, 'Khi mọi điều không như ý', 'Hae Min');
 
 -- --------------------------------------------------------
 
@@ -138,6 +147,22 @@ CREATE TRIGGER `trg_cart_total_quantity` AFTER INSERT ON `cartdetail` FOR EACH R
         WHERE cartID = NEW.cartID
     )
     WHERE cartID = NEW.cartID;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_update_totalQuantity_after_delete` AFTER DELETE ON `cartdetail` FOR EACH ROW BEGIN
+    UPDATE carts
+    SET totalQuantity = totalQuantity - OLD.quantity
+    WHERE cartID = OLD.cartID;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_update_totalQuantity_after_update` AFTER UPDATE ON `cartdetail` FOR EACH ROW BEGIN
+    UPDATE carts
+    SET totalQuantity = totalQuantity - OLD.quantity + NEW.quantity
+    WHERE cartID = OLD.cartID;
 END
 $$
 DELIMITER ;
@@ -200,15 +225,15 @@ CREATE TABLE `edition` (
 
 INSERT INTO `edition` (`editionID`, `volumeID`, `publicationYear`, `publisherName`, `quotedPrice`, `status`, `coverType`, `AverageCost`, `StockQuantity`, `salePrice`) VALUES
 (1, 1, '2022', 'Nhã Nam', 120000, 'show', 'paperBack', 70000.00, 48, 120000.00),
-(2, 2, '2021', 'Nhã Nam', 135000, 'show', 'paperBack', 80000.00, 39, 135000.00),
+(2, 2, '2026', 'Nhã Nam', 135000, 'show', 'paperBack', 80000.00, 39, 135000.00),
 (3, 3, '2020', 'Kim Đồng', 90000, 'show', 'paperBack', 50000.00, 60, 90000.00),
 (4, 3, '2023', 'Kim Đồng', 100000, 'show', 'paperBack', 90000.00, 30, 100000.00),
 (5, 4, '2022', 'First News', 150000, 'show', 'paperBack', 60000.00, 45, NULL),
 (6, 5, '2023', 'Nhã Nam', 110000, 'show', 'paperBack', 0.00, 0, NULL),
 (7, 6, '2021', 'First News', 140000, 'show', 'paperBack', 0.00, 0, NULL),
 (8, 7, '2022', 'Nhã Nam', 125000, 'show', 'paperBack', 0.00, 0, NULL),
-(9, 7, '2023', 'Kim Đồng', 170000, 'show', 'hardCover', 0.00, 0, NULL),
-(10, 8, '2023', 'Nhã Nam', 130000, 'show', 'paperBack', 0.00, 0, NULL);
+(9, 7, '2026', 'Kim Đồng', 170000, 'show', 'hardCover', 0.00, 0, NULL),
+(10, 8, '2026', 'Nhã Nam', 130000, 'show', 'paperBack', 0.00, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -494,16 +519,17 @@ CREATE TABLE `orders` (
   `totalPrice` decimal(12,2) DEFAULT NULL,
   `createAt` datetime DEFAULT NULL,
   `status` enum('processing','confirmed','delivering','completed','canceled') DEFAULT NULL,
-  `userID` int(11) NOT NULL
+  `userID` int(11) NOT NULL,
+  `shipCost` decimal(12,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`orderID`, `addressID`, `paymentID`, `totalPrice`, `createAt`, `status`, `userID`) VALUES
-(1, 1, 1, 375000.00, '2026-02-01 00:00:00', 'completed', 1),
-(2, 2, 2, 370000.00, '2026-02-02 00:00:00', 'canceled', 2);
+INSERT INTO `orders` (`orderID`, `addressID`, `paymentID`, `totalPrice`, `createAt`, `status`, `userID`, `shipCost`) VALUES
+(1, 1, 1, 400000.00, '2026-02-01 00:00:00', 'completed', 1, 25000.00),
+(2, 2, 2, 395000.00, '2026-02-02 00:00:00', 'canceled', 2, 25000.00);
 
 --
 -- Triggers `orders`
@@ -595,8 +621,6 @@ CREATE TABLE `users` (
   `userID` int(11) NOT NULL,
   `userName` varchar(10) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `numberPhone` varchar(10) DEFAULT NULL,
-  `fullName` varchar(255) DEFAULT NULL,
   `status` enum('active','inactive') DEFAULT NULL,
   `role` enum('user','admin') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -605,9 +629,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userID`, `userName`, `password`, `numberPhone`, `fullName`, `status`, `role`) VALUES
-(1, 'tieumy', '$2y$10$sBE8D67sj1wL4Vq9oMscI.6yIJ4iuail5BPI.Rdp.eTZzI1TW9Wzm', '0123456789', '', 'active', 'user'),
-(2, 'taho', '$2y$10$OXKVxXPYACOXMbftpzu3Q.eaYCMsLivaPJX3XASmlTFMgvn1h9Jyu', '0999999991', '', 'active', 'user');
+INSERT INTO `users` (`userID`, `userName`, `password`, `status`, `role`) VALUES
+(1, 'tieumy', '$2y$10$sBE8D67sj1wL4Vq9oMscI.6yIJ4iuail5BPI.Rdp.eTZzI1TW9Wzm', 'active', 'user'),
+(2, 'taho', '$2y$10$OXKVxXPYACOXMbftpzu3Q.eaYCMsLivaPJX3XASmlTFMgvn1h9Jyu', 'active', 'user');
 
 --
 -- Triggers `users`
@@ -642,13 +666,31 @@ CREATE TABLE `volumes` (
 INSERT INTO `volumes` (`volumeID`, `bookID`, `volume`, `volumeName`, `imageURL`, `description`) VALUES
 (1, 1, 1, 'Đừng Bao Giờ Buông Dao', 'app/assets/images/dungbaogiobuongdao.png', 'Chẳng có thị trấn nào giống như thị trấn Prentiss.\r\nNơi không còn bóng dáng phụ nữ.\r\nNơi mọi suy nghĩ trở thành Tiếng Ồn mà bất kỳ sinh vật nào cũng có thể nghe thấy.\r\nDòng chảy Tiếng Ồn ầm ĩ không bao giờ dứt.\r\nKhông tâm tư thầm kín nào còn là bí mật.\r\nNgay cả trong giấc ngủ.\r\nVậy mà khi sự im lặng không tưởng xuất hiện, vẫn có một bí mật tồi tệ đến mức khiến Todd, thằng nhóc chỉ còn một tháng nữa là trở thành đàn ông, thằng nhóc cuối cùng chưa trở thành đàn ông, phải bỏ chạy hòng giữ lấy mạng sống. Cùng con chó biết nói. Sự im lặng. Và con dao.\r\nNhưng làm sao để chạy thoát khi những kẻ săn đuổi có thể nghe được mọi suy nghĩ trong đầu ta?'),
 (2, 2, 1, 'Đèn Nhỏ Và Những Đứa Con Của Biển', 'app/assets/images/dennhovanhungduaconcuabien.png', 'TÁC PHẨM PHIÊU LƯU NHUỐM ĐẦY MÀU SẮC CỔ TÍCH!\r\n\r\nGọi cô là Đèn Nhỏ vì cô là con gái người thắp đèn biển. Nhưng chính cô gái nhỏ lơ đễnh mà nhân hậu, kiên cường ấy mới là người chiều chiều, thay người cha què cụt say xỉn, leo lên thắp sáng ngọn hải đăng.\r\n\r\nCho đến một ngày, Đèn quên mua diêm. Hải đăng tắt ngúm. Thảm họa ập vào.\r\n\r\nNàng tiên cá đánh đổi giọng hát để được sống với người mình yêu, cánh cửa cấm kỵ trong dinh thự trăm phòng, quái vật dưới gầm giường, những dị nhân hội chợ, những cướp biển ngang tàn, những thủy quái khơi xa,… Cổ tích cứ thế đan dệt, như ngọn gió đại dương kéo ta băng băng qua những trang phiêu lưu kỳ dị mà bay bổng, u tối mà ấm lòng. Một câu chuyện mê đắm về lòng can đảm, sự trung thành, về tình cảm gia đình và tình bạn bất chấp khác biệt. Một bầu không khí mầu nhiệm mà ta muốn kéo dài mãi mãi.'),
-(3, 3, 1, '', 'app/assets/images/motlitnuocmat.png', '“Hãy sống! Mình muốn hít thở thật sâu dưới trời xanh.”\r\n\r\nMột tâm hồn nhạy cảm.\r\n\r\nMột gia đình ấm áp.\r\n\r\nMột căn bệnh hiểm nghèo.\r\n\r\nMột cơ thể tật nguyền.\r\n\r\nĐó là những gì Kito Aya có trong hơn 20 năm cuộc đời. Với Aya, tương lai của cô là một con đường hẹp, và càng ngày nó càng trở nên hẹp hơn. Căn bệnh ngăn trở Aya khỏi tất cả những ước mơ và dự định, thậm chí việc tự mình bước ra ngoài phố để đi tới hiệu sách cũng trở thành một khao khát cháy bỏng. Hơn 6 năm kiên trì viết nhật ký, cô kể về những cảm nhận và suy tư của bản thân trong suốt quãng thời gian chứng kiến cơ thể mình từng bước từng bước gánh lấy một số phận đau đớn . Nhưng từ trong nước mắt và tật nguyền, cuộc tìm kiếm giá trị bản thân của cô đã làm rúng động cả Nhật Bản.'),
-(4, 4, 1, '', 'app/assets/hoichunge.png', 'Một bộ phim ngắn bí ẩn và độc hại khiến người xem đột ngột bị mù... Vậy là đủ để đi tong toàn bộ kỳ nghỉ hè của trung úy cảnh sát Lucie Hennebelle. Năm xác chết bị cắt xẻ tàn bạo được tìm thấy trong tình trạng mất não, mất mắt, và phân hủy đến khó lòng nhận dạng... Chẳng cần gì hơn thế để mời gọi thanh tra trưởng Franck Sharko đang trong kỳ nghỉ cưỡng chế phải quay trở lại đội Hình sự. Hai hướng điều tra cho cùng một vụ án duy nhấ sẽ kết hợp Hennebelle và Sharko, đưa họ đi từ những khu ổ chuột nhơ nhớp ở Cairo đến các trại trẻ mồ côi ở Canada, để rồi đối mặt với một tội ác có một không hai, một thực tế tàn bạo, hé lộ sự thật rằng tất cả chúng ta ai cũng đều có thể phạm phải điều tồi tệ nhất. Với Hội chứng E, Franck Thilliez thêm một lần nữa giúp chúng ta hiểu thế nào là kinh hoàng khi đưa chúng ta vào tâm hồn con người, vào cội rễ của bạo lực và cái ác.'),
-(5, 5, 1, '', 'app/assets/conthonguyenrua.png', 'Chiếc đèn hình thỏ mang sức mạnh nguyền rủa, cái đầu nhớp nhúa trồi lên từ bồn cầu, vụ tai nạn xe hơi ly kỳ giữa đầm lầy, con cáo chảy máu vàng ròng, những kẻ sống và người chết bị trói buộc trong dòng chảy thời gian...\r\n\r\nCon thỏ nguyền rủa là tập truyện ngắn đầy ám ảnh, hài hước, gớm ghiếc và ghê rợn về những cơn ác mộng của cuộc sống hiện đại, trong một thế giới \"nhìn chung là khốc liệt và xa lạ, đôi khi cũng đẹp và mê hoặc, nhưng ngay cả trong những giây phút đó, về cơ bản nó vẫn là một chốn man rợ.\"\r\n\r\nCuốn sách là tuyển tập 10 truyện ngắn kinh dị của nhà văn Hàn Quốc Chung Bora, tái hiện lại những cuộc đời cô độc giữa xã hội vô cảm lạnh lùng.'),
-(6, 6, 1, '', 'app/assets/guinhungnguoikhongduocbaove.png', 'Hai công chức mẫu mực của tỉnh Miyagi lần lược được phát hiện đã bị giam giữ và chết đói. Cảnh sát không thể tìm ra bất cứ manh mối nào, dù là nhỏ nhất.\r\n\r\nTrong khi ấy, Tone Katsuhisa, một tên tù nhân cải tạo tốt vừa được phóng thích trước thời hạn và đang lần theo một nhân vật hắn từng liên quan trong quá khứ. Tone đang có kế hoạch gì? Và tại sao hai nạn nhân lại bị giết hại một cách tàn nhẫn như vậy? Vụ án liệu có dừng lại ở hai nạn nhân? Và trong vụ án này, thật ra ai mới là nạn nhân, ai mới cần được bảo vệ, còn ai là thủ phạm?\r\n\r\nGiận dữ, khổ đau, oán hận, xung đột, chính nghĩa... Giữa vô văn những điều hết sức thường nhật lại là một sự thật tàn khốc đến xé lòng...'),
-(7, 7, 1, 'Khách Sạn Mặt Nạ Tập 1', 'app/assets/khachsanmatna1bia.webp', 'Một vụ giết người hàng loạt bí ẩn ở Tokyo. Hiện chưa rõ nghi phạm và mục tiêu tiếp theo. Điều duy nhất từ mật mã hung thủ để lại ám chỉ nơi sẽ diễn ra tội ác là khách sạn hạng nhất Cortesia Tokyo. Nitta Kousuke, viên cảnh sát hình sự trẻ tuổi, nhận lệnh cải trang làm nhân viên khách sạn để nằm vùng điều tra. Hướng dẫn nghiệp vụ cho anh là Yamagishi Naomi, một nữ lễ tân thông minh có óc quan sát sắc sảo. Liệu cả hai có thể lần ra chân tướng vụ án, trong khi những vị khách đáng ngờ cứ lần lượt ghé thăm!?'),
-(8, 7, 2, 'Khách Sạn Mặt Nạ Tập 2', 'app/assets/khachsanmatna2.jpg', 'Yamagishi Naomi được điều đến đào tạo lễ tân cho khách sạn Cortesia Osaka mới khai trương, cô luôn có thói quen chú ý đến tấm mặt nạ của một vài vị khách. Trong khi đó, Nitta Kousuke đang điều tra một người đàn ông liên quan đến vụ án giết người xảy ra ở Tokyo, kẻ tuyên bố đã đến Osaka vào đêm xảy ra vụ án, nhưng nhất định không nói tên khách sạn. Điều gì buộc anh ta giữ kín ngay cả khi bị tình nghi giết người? Nếu công việc của Naomi là bảo vệ mặt nạ của khách hàng, thì nhiệm vụ của Nitta là lột bỏ mặt nạ của tội phạm. Khách sạn mặt nạ – Đêm trước lễ hội hóa trang là những câu chuyện thú vị được kể trước thời điểm hai con người ấy gặp nhau');
-
+(3, 3, 1, 'Một Lít Nước Mắt', 'app/assets/images/motlitnuocmat.png', '“Hãy sống! Mình muốn hít thở thật sâu dưới trời xanh.”\r\n\r\nMột tâm hồn nhạy cảm.\r\n\r\nMột gia đình ấm áp.\r\n\r\nMột căn bệnh hiểm nghèo.\r\n\r\nMột cơ thể tật nguyền.\r\n\r\nĐó là những gì Kito Aya có trong hơn 20 năm cuộc đời. Với Aya, tương lai của cô là một con đường hẹp, và càng ngày nó càng trở nên hẹp hơn. Căn bệnh ngăn trở Aya khỏi tất cả những ước mơ và dự định, thậm chí việc tự mình bước ra ngoài phố để đi tới hiệu sách cũng trở thành một khao khát cháy bỏng. Hơn 6 năm kiên trì viết nhật ký, cô kể về những cảm nhận và suy tư của bản thân trong suốt quãng thời gian chứng kiến cơ thể mình từng bước từng bước gánh lấy một số phận đau đớn . Nhưng từ trong nước mắt và tật nguyền, cuộc tìm kiếm giá trị bản thân của cô đã làm rúng động cả Nhật Bản.'),
+(4, 4, 1, 'Hội Chứng E', 'app/assets/images/hoichunge.png', 'Một bộ phim ngắn bí ẩn và độc hại khiến người xem đột ngột bị mù... Vậy là đủ để đi tong toàn bộ kỳ nghỉ hè của trung úy cảnh sát Lucie Hennebelle. Năm xác chết bị cắt xẻ tàn bạo được tìm thấy trong tình trạng mất não, mất mắt, và phân hủy đến khó lòng nhận dạng... Chẳng cần gì hơn thế để mời gọi thanh tra trưởng Franck Sharko đang trong kỳ nghỉ cưỡng chế phải quay trở lại đội Hình sự. Hai hướng điều tra cho cùng một vụ án duy nhấ sẽ kết hợp Hennebelle và Sharko, đưa họ đi từ những khu ổ chuột nhơ nhớp ở Cairo đến các trại trẻ mồ côi ở Canada, để rồi đối mặt với một tội ác có một không hai, một thực tế tàn bạo, hé lộ sự thật rằng tất cả chúng ta ai cũng đều có thể phạm phải điều tồi tệ nhất. Với Hội chứng E, Franck Thilliez thêm một lần nữa giúp chúng ta hiểu thế nào là kinh hoàng khi đưa chúng ta vào tâm hồn con người, vào cội rễ của bạo lực và cái ác.'),
+(5, 5, 1, 'Con Thỏ Nguyền Rủa', 'app/assets/images/conthonguyenrua.png', 'Chiếc đèn hình thỏ mang sức mạnh nguyền rủa, cái đầu nhớp nhúa trồi lên từ bồn cầu, vụ tai nạn xe hơi ly kỳ giữa đầm lầy, con cáo chảy máu vàng ròng, những kẻ sống và người chết bị trói buộc trong dòng chảy thời gian...\r\n\r\nCon thỏ nguyền rủa là tập truyện ngắn đầy ám ảnh, hài hước, gớm ghiếc và ghê rợn về những cơn ác mộng của cuộc sống hiện đại, trong một thế giới \"nhìn chung là khốc liệt và xa lạ, đôi khi cũng đẹp và mê hoặc, nhưng ngay cả trong những giây phút đó, về cơ bản nó vẫn là một chốn man rợ.\"\r\n\r\nCuốn sách là tuyển tập 10 truyện ngắn kinh dị của nhà văn Hàn Quốc Chung Bora, tái hiện lại những cuộc đời cô độc giữa xã hội vô cảm lạnh lùng.'),
+(6, 6, 1, 'Gửi Những Người Không Được Bảo Vệ', 'app/assets/images/guinhungnguoikhongduocbaove.png', 'Hai công chức mẫu mực của tỉnh Miyagi lần lược được phát hiện đã bị giam giữ và chết đói. Cảnh sát không thể tìm ra bất cứ manh mối nào, dù là nhỏ nhất.\r\n\r\nTrong khi ấy, Tone Katsuhisa, một tên tù nhân cải tạo tốt vừa được phóng thích trước thời hạn và đang lần theo một nhân vật hắn từng liên quan trong quá khứ. Tone đang có kế hoạch gì? Và tại sao hai nạn nhân lại bị giết hại một cách tàn nhẫn như vậy? Vụ án liệu có dừng lại ở hai nạn nhân? Và trong vụ án này, thật ra ai mới là nạn nhân, ai mới cần được bảo vệ, còn ai là thủ phạm?\r\n\r\nGiận dữ, khổ đau, oán hận, xung đột, chính nghĩa... Giữa vô văn những điều hết sức thường nhật lại là một sự thật tàn khốc đến xé lòng...'),
+(7, 7, 1, 'Khách Sạn Mặt Nạ Tập 1', 'app/assets/images/khachsanmatna1bia.webp', 'Một vụ giết người hàng loạt bí ẩn ở Tokyo. Hiện chưa rõ nghi phạm và mục tiêu tiếp theo. Điều duy nhất từ mật mã hung thủ để lại ám chỉ nơi sẽ diễn ra tội ác là khách sạn hạng nhất Cortesia Tokyo. Nitta Kousuke, viên cảnh sát hình sự trẻ tuổi, nhận lệnh cải trang làm nhân viên khách sạn để nằm vùng điều tra. Hướng dẫn nghiệp vụ cho anh là Yamagishi Naomi, một nữ lễ tân thông minh có óc quan sát sắc sảo. Liệu cả hai có thể lần ra chân tướng vụ án, trong khi những vị khách đáng ngờ cứ lần lượt ghé thăm!?'),
+(8, 7, 2, 'Khách Sạn Mặt Nạ Tập 2', 'app/assets/images/khachsanmatna2.jpg', 'Yamagishi Naomi được điều đến đào tạo lễ tân cho khách sạn Cortesia Osaka mới khai trương, cô luôn có thói quen chú ý đến tấm mặt nạ của một vài vị khách. Trong khi đó, Nitta Kousuke đang điều tra một người đàn ông liên quan đến vụ án giết người xảy ra ở Tokyo, kẻ tuyên bố đã đến Osaka vào đêm xảy ra vụ án, nhưng nhất định không nói tên khách sạn. Điều gì buộc anh ta giữ kín ngay cả khi bị tình nghi giết người? Nếu công việc của Naomi là bảo vệ mặt nạ của khách hàng, thì nhiệm vụ của Nitta là lột bỏ mặt nạ của tội phạm. Khách sạn mặt nạ – Đêm trước lễ hội hóa trang là những câu chuyện thú vị được kể trước thời điểm hai con người ấy gặp nhau'),
+(9, 8, 1, 'Người Tốt Lầu Trên', 'app/assets/images/nguoi-tot-lau-tren.png', 'Một câu chuyện xã hội sâu sắc về những con người sống cùng nhau trong một tòa nhà và những bí mật ẩn sau vẻ ngoài tử tế.'),
+(10, 9, 1, 'Nhà Ảo Thuật Đen Và Những Người Phụ Nữ Thức Tỉnh', 'app/assets/images/nha-ao-thuat-den.png', 'Tiểu thuyết của Higashino Keigo về những bí mật, ảo thuật và sức mạnh của những người phụ nữ bị tổn thương.'),
+(11, 10, 1, 'Thú Hoang', 'app/assets/images/thu-hoang.png', 'Một câu chuyện trinh thám đầy kịch tính về tội ác, bí mật và bản chất hoang dã của con người.'),
+(12, 11, 1, 'Bài Học Tiếng Hy Lạp', 'app/assets/images/bai-hoc-tieng-hy-lap.png', 'Tiểu thuyết của Han Kang kể về sự kết nối giữa ngôn ngữ, ký ức và những tổn thương sâu sắc của con người.'),
+(13, 12, 1, 'Những Kỳ Án Pháp Y', 'app/assets/images/nhung-ky-an-phap-y.png', 'Cuốn sách tổng hợp những vụ án pháp y nổi tiếng, giúp người đọc hiểu hơn về khoa học điều tra tội phạm.'),
+(14, 13, 1, 'Khoa Học Về Dinh Dưỡng', 'app/assets/images/khoa-hoc-ve-dinh-duong.png', 'Cuốn sách khoa học phổ thông giải thích các nguyên tắc dinh dưỡng và cách cơ thể con người sử dụng thực phẩm.'),
+(15, 14, 1, 'Thành Phố Và Những Bức Tường Bất Định', 'app/assets/images/thanh-pho-va-nhung-buc-tuong-bat-dinh.png', 'Tiểu thuyết mới của Haruki Murakami về những bức tường vô hình trong tâm trí và hành trình tìm kiếm bản thân.'),
+(16, 15, 1, 'Tam Quốc Cổ Mật 2 - Rồng Náu Vực Sâu', 'app/assets/images/tam-quoc-co-mat-2.png', 'Tiếp nối câu chuyện Tam Quốc đầy âm mưu và chiến lược, nơi những bí mật lịch sử dần được hé lộ.'),
+(17, 16, 1, 'Ông Nội Vượt Ngục', 'app/assets/images/ong-noi-vuot-nguc.png', 'Một câu chuyện hài hước và cảm động về cậu bé cùng người ông kỳ quặc lên kế hoạch vượt ngục.'),
+(18, 17, 1, 'Sự Sống Bất Khả', 'app/assets/images/su-song-bat-kha.png', 'Matt Haig kể câu chuyện triết lý về sự tồn tại của con người và ý nghĩa của cuộc sống.'),
+(19, 18, 1, 'Lâu Đài Trên Mây', 'app/assets/images/lau-dai-tren-may.png', 'Một cuộc phiêu lưu kỳ ảo tiếp nối thế giới của pháp sư Howl và những phép thuật đầy bất ngờ.'),
+(20, 19, 1, 'Hỗn Mang 1 - Đừng Bao Giờ Buông Dao', 'app/assets/images/hon-mang-1.png', 'Phần đầu của bộ Hỗn Mang, nơi Todd phải đối mặt với thế giới đầy tiếng ồn và những bí mật nguy hiểm.'),
+(21, 20, 1, 'Gửi Những Người Không Được Bảo Vệ', 'app/assets/images/gui-nhung-nguoi-khong-duoc-bao-ve.png', 'Một câu chuyện trinh thám đầy cảm xúc về công lý và những con người bị bỏ quên trong xã hội.'),
+(22, 21, 1, 'Tội Ác Và Hình Phạt', 'app/assets/images/toi-ac-va-hinh-phat.png', 'Tác phẩm kinh điển của Dostoevsky về tội lỗi, lương tâm và hành trình chuộc tội của con người.'),
+(23, 22, 1, 'Nhà Giả Kim', 'app/assets/images/nha-gia-kim.png', 'Cuốn sách nổi tiếng của Paulo Coelho kể về hành trình đi tìm kho báu và ước mơ của chàng chăn cừu Santiago.'),
+(24, 23, 1, 'Thanh Xuân, Sao Mà Đau Đớn!', 'app/assets/images/thanh-xuan-sao-ma-dau-don.png', 'Một cuốn sách nói về những khó khăn, nỗi đau và sự trưởng thành trong tuổi trẻ.'),
+(25, 24, 1, 'Cuộc Chiến Vi Mạch', 'app/assets/images/cuoc-chien-vi-mach.png', 'Cuốn sách lịch sử – công nghệ kể về cuộc chiến toàn cầu để kiểm soát ngành công nghiệp vi mạch.'),
+(26, 25, 1, 'Lâu Đài Bảy Của Pháp Sư Howl', 'app/assets/images/lau-dai-bay-cua-phap-su-howl.png', 'Câu chuyện kỳ ảo về pháp sư Howl và những cuộc phiêu lưu phép thuật trong thế giới đầy tưởng tượng.'),
+(27, 26, 1, 'Một Thoáng Ta Rực Rỡ Ở Nhân Gian', 'app/assets/images/mot-thoang-ta-ruc-ro-o-nhan-gian.png', 'Tiểu thuyết đầy cảm xúc của Ocean Vuong về tình yêu, gia đình và hành trình tìm kiếm bản sắc.');
 --
 -- Indexes for dumped tables
 --
@@ -779,7 +821,7 @@ ALTER TABLE `address`
 -- AUTO_INCREMENT for table `books`
 --
 ALTER TABLE `books`
-  MODIFY `bookID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `bookID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `cartdetail`
