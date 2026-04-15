@@ -260,7 +260,7 @@ async function renderPagination(totalPage, currentPage) {
 }
 
 function addItemClicks(container) {
-    container.addEventListener("click", (e) => {
+    container.addEventListener("click", async (e) => {
         const btn = e.target.closest(".btn-addCart");
         if(!btn) return;
         const editionID = btn.getAttribute("data-id");
@@ -270,7 +270,22 @@ function addItemClicks(container) {
             alert("Người dùng chưa đăng nhập. Vui lòng đăng nhập đẻ thêm sách vào giỏ hàng!");
             return;
         }
-        window.location.href = BASE_URL + `cart/addItem/${editionID}`;
+        
+        try {
+            const res = await fetch(BASE_URL + `cart/addItem/${editionID}`);
+            const data = await res.json();
+            if(data.success) {
+                alert("Thêm vào giỏ hàng thành công!");
+            } else {
+                alert(data.message);
+                if(data.message.includes("chưa đăng nhập") || data.message.includes("đăng ký")) {
+                    window.location.href = BASE_URL + "login";
+                }
+            }
+        } catch(err) {
+            console.error(err);
+            alert("Lỗi kết nối khi thêm vào giỏ hàng!");
+        }
     });
 }
 

@@ -1,5 +1,5 @@
 <?php
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
     class Cart {
         public static function getItemCart() {
             if(!isset($_SESSION['user'])) {
@@ -171,16 +171,26 @@
             $stmt->bindParam(1, $userID);
             $stmt->execute();
             $cart = $stmt->fetch(PDO::FETCH_ASSOC);
-            $cartID = (int)$cart["cartID"];
+            
+            if (!$cart) {
+                $insertCart = $conn->prepare("INSERT INTO carts (userID) VALUES (?)");
+                $insertCart->bindParam(1, $userID);
+                $insertCart->execute();
+                $cartID = $conn->lastInsertId();
+            } else {
+                $cartID = (int)$cart["cartID"];
+            }
 
             $check = $conn->prepare("
                 SELECT editionID
                 FROM cartdetail
-                WHERE editionID = ?
+                WHERE editionID = ? AND cartID = ?
             ");
             $check->bindParam(1, $editionID);
+            $check->bindParam(2, $cartID);
             $check->execute();
             $row = $check->rowCount() > 0;
+            
             if($row) {
                 $stmt1=  $conn->prepare("
                     UPDATE cartdetail
@@ -192,19 +202,18 @@
                 $stmt1->execute();
                 if($stmt1->rowCount() > 0) {
                     return true;
-                };
+                }
             } else {
                 $stmt1= $conn->prepare("
                     INSERT INTO cartdetail (editionID, cartID, quantity)
                         VALUES(?, ?, 1)
-    
                 ");
                 $stmt1->bindParam(1, $editionID);
                 $stmt1->bindParam(2, $cartID);
                 $stmt1->execute();
                 if($stmt1->rowCount() > 0) {
                     return true;
-                };
+                }
             }
 
 

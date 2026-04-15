@@ -120,8 +120,11 @@
                 ob_start();
                 header("Content-Type: application/json; charset=utf-8");
                 $data = Cart::addItem($editionID);
-                
-                header("Location:" . BASE_URL . "home");
+                ob_end_clean();
+                echo json_encode([
+                    "success" => true,
+                    "message" => "Thêm vào giỏ hàng thành công"
+                ]);
                 exit();
             } catch(Exception $e) {
                 while(ob_get_level()) {

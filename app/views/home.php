@@ -166,8 +166,8 @@
 
     <script src="<?= BASE_URL ?>app/assets/js/jquery.min.js"></script>
     <script src="<?= BASE_URL ?>app/assets/js/owl.carousel.min.js"></script>
-    <script src="<?= BASE_URL ?>app/assets/js/home.js"></script>
-    <script src="<?= BASE_URL ?>app/assets/js/bookDetail.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/js/home.js?v=2"></script>
+    <script src="<?= BASE_URL ?>app/assets/js/bookDetail.js?v=2"></script>
 </body>
 
 </html>

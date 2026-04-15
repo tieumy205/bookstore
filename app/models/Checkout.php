@@ -1,5 +1,5 @@
 <?php
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) { session_start(); }
     class Checkout {
         public static function getEditionCheckout($editionID) {
             $db = new Database();
@@ -77,7 +77,7 @@
             }
             
             $stmt = $conn->prepare("
-                SELECT a.userID, a.numberPhone, a.consigneeName, a.province, a.district, a.detailAddress, a.isDefautl,a.addressID
+                SELECT a.userID, a.numberPhone, a.consigneeName, a.province, a.district, a.detailAddress, a.isDefault,a.addressID
                 FROM address a
                 WHERE a.userID = ? 
             ");
@@ -121,7 +121,7 @@
             }
 
             $stmt = $conn->prepare("
-                INSERT INTO address (userID, detailAddress, province, district, isDefautl, consigneeName, numberPhone)
+                INSERT INTO address (userID, detailAddress, province, district, isDefault, consigneeName, numberPhone)
                     VALUES (?, ?, ?, ?, 0, ?, ?)
             ");
             $stmt->bindParam(1, $userID);

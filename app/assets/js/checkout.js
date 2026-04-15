@@ -118,6 +118,7 @@ async function loadEditionFromCart() {
             });
 
             productContainer.innerHTML = html;
+            updatePriceSummary(books);
         } else {
             console.error("Error:", data.message);
             alert(data.message);
@@ -170,6 +171,7 @@ async function loadCheckoutPage(editionID) {
             </div>
             `
             productContainer.innerHTML = html;
+            updatePriceSummary(book);
         } else {
             console.error("Error:", data.message);
             alert(data.message);
@@ -211,6 +213,9 @@ async function loadUserInfo() {
             localStorage.setItem("address", JSON.stringify(address));
 
             localStorage.setItem("addressDefault", JSON.stringify(addressDefautl));
+            if (!localStorage.getItem("addressSelected") && addressDefautl) {
+                localStorage.setItem("addressSelected", JSON.stringify(addressDefautl));
+            }
             
             
             
@@ -260,6 +265,20 @@ function formatCurrency(amount) {
 
 function parsePriceToInt(amount) {
     return parseInt(amount);
+}
+
+function updatePriceSummary(books) {
+    let subtotal = 0;
+    books.forEach(book => {
+        const price = parsePriceToInt(book.salePrice || book.quotedPrice) || 0;
+        const q = parseInt(book.quantity) || 1;
+        subtotal += price * q;
+    });
+    const shippingFee = 50000;
+    const total = subtotal + shippingFee;
+
+    document.getElementById("subtotal").textContent = formatCurrency(subtotal);
+    document.getElementById("total").textContent = formatCurrency(total);
 }
 
 /**
@@ -612,8 +631,13 @@ function getPaymentMethod() {
 async function checkout() {
     try {
         const books = JSON.parse(localStorage.getItem("books")) || [];
-        const method = JSON.parse(localStorage.getItem("method")) || "";
-        const addressSelected = JSON.parse(localStorage.getItem("addressSelected")) || "";
+        const method = document.getElementById("paymentMethod").value;
+        const addressSelected = JSON.parse(localStorage.getItem("addressSelected"));
+        
+        if (!addressSelected || !addressSelected.id) {
+            alert("Vui lòng chọn địa chỉ nhận hàng.");
+            return;
+        }
         const addressID = addressSelected.id;
         let paymentID = null;
         switch (method) {

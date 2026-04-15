@@ -1,5 +1,5 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 class Order {
     public static function addOrder($addressID, $paymentID, $books) {

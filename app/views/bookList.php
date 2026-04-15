@@ -64,8 +64,8 @@
         
    
 
-    <script src="<?= BASE_URL ?>app/assets/js/bookList.js"></script>
-    <script src="<?= BASE_URL ?>app/assets/js/bookDetail.js"></script>
+    <script src="<?= BASE_URL ?>app/assets/js/bookList.js?v=2"></script>
+    <script src="<?= BASE_URL ?>app/assets/js/bookDetail.js?v=2"></script>
     <script src="<?= BASE_URL ?>app/assets/js/header.js"></script>
 </body>
 </html>

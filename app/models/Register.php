@@ -58,7 +58,7 @@ class Register {
             echo "Inserted user ID: " . $userId; // Debugging line
 
             $stmt2 = $conn->prepare("
-                INSERT INTO address (userId,detailAddress,province,district, isDefautl, consigneeName, numberPhone)
+                INSERT INTO address (userId,detailAddress,province,district, isDefault, consigneeName, numberPhone)
                 VALUES (?,?,?,?, 1, ?, ?);
             ");
 
